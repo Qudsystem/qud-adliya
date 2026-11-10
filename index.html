@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="manifest" href="manifest.json">
+    <title>عدلية - المساعد القانوني المصري</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emerald-supreme: #064e3b;
+            --gold-supreme: #D4AF37;
+            --legal-bg: #020617;
+            --bar-dark: #0a0f1e;
+            
+            /* متغيرات التحكم في انحناء شريط التبويبات */
+            /* 
+             * أمثلة على الاستخدام:
+             * 
+             * 1. زيادة انحناء الزوايا العليا:
+             *    --bar-top-left-radius-x: 40px;
+             *    --bar-top-left-radius-y: 40px;
+             * 
+             * 2. نقل نقطة الاتصال السفلية يميناً (للمنطقة اليسرى):
+             *    --bar-bottom-left-radius-x: 20px;  (ينقل النقطة يميناً)
+             * 
+             * 3. نقل نقطة الاتصال السفلية يساراً (للمنطقة اليمنى):
+             *    --bar-bottom-right-radius-x: -20px; (ينقل النقطة يساراً)
+             * 
+             * 4. إنشاء انحناء سفلي خفيف:
+             *    --bar-bottom-left-radius-y: 10px;
+             *    --bar-bottom-right-radius-y: 10px;
+             */
+            
+            /* الزوايا العليا - التحكم في معدل الانحناء */
+            --bar-top-left-radius-x: 24px;      /* انحناء الزاوية العليا اليسرى (العرض) - قيم أكبر = انحناء أكثر */
+            --bar-top-left-radius-y: 24px;      /* انحناء الزاوية العليا اليسرى (الارتفاع) */
+            --bar-top-right-radius-x: 24px;     /* انحناء الزاوية العليا اليمنى (العرض) - قيم أكبر = انحناء أكثر */
+            --bar-top-right-radius-y: 24px;     /* انحناء الزاوية العليا اليمنى (الارتفاع) */
+            
+            /* نقاط الاتصال السفلية - التحكم في موقع التلاقي مع الضلع السفلي */
+            /* قيم موجبة تنقل النقطة يميناً، قيم سالبة تنقلها يساراً */
+            --bar-bottom-left-radius-x: 0px;    /* إزاحة نقطة الاتصال السفلى اليسرى (يميناً/يساراً) */
+            --bar-bottom-left-radius-y: 0px;     /* إزاحة نقطة الاتصال السفلى اليسرى (أعلى/أسفل) - قيم موجبة ترفع النقطة */
+            --bar-bottom-right-radius-x: 0px;    /* إزاحة نقطة الاتصال السفلى اليمنى (يميناً/يساراً) */
+            --bar-bottom-right-radius-y: 0px;   /* إزاحة نقطة الاتصال السفلى اليمنى (أعلى/أسفل) - قيم موجبة ترفع النقطة */
+        }
+        
+        body {
+            font-family: 'Inter', 'Amiri', serif;
+            background-color: var(--legal-bg);
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* شريط الكبسولة المصغر (Mini Mode) - ملتصق بالحافة السفلية - نفس الحجم */
+        .bar-bird-mini {
+            height: 80px;
+            background: rgba(10, 15, 30, 0.98);
+            backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            /* الزوايا العليا: انحناء كبير، الزوايا السفلية: مستقيمة (0) لتلامس الحافة السفلية */
+            border-radius: 40px 40px 0 0; 
+            width: 100%;
+            margin-bottom: 0;
+            margin-top: 0;
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.6), 0 10px 40px rgba(0,0,0,0.4);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* شريط الحالة الكاملة (Full Mode) - طافي عن الحافة السفلية */
+        .bar-bird-full {
+            height: 80px;
+            background: rgba(10, 15, 30, 0.98);
+            backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px; 
+            width: 94%;
+            margin-bottom: 20px;
+            margin-top: 0;
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.6), 0 10px 40px rgba(0,0,0,0.4);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* الدائرة الذهبية الميكانيكية - غاطسة دائماً */
+        .semicircle-handle {
+            width: 60px; 
+            height: 60px;
+            background: var(--gold-supreme);
+            border: 2px solid #b45309;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            border-radius: 50%;
+            z-index: 900;
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            pointer-events: auto;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* وضع الغوص المصغر (Scroll Down) - نفس حجم الدائرة الكبيرة */
+        .handle-submerged {
+            width: 60px !important;
+            height: 60px !important;
+            transform: translateY(22px) !important; 
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            border-width: 2px;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* وضع الغوص الكبير (Home) - طافي مع الشريط الكبير */
+        .handle-home-submerged {
+            transform: translateY(40px) !important; 
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-icon-btn {
+            cursor: pointer;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            -webkit-tap-highlight-color: transparent;
+            z-index: 950;
+        }
+
+        /* الأيقونات الشبحية في وضع المصغر */
+        .micro-icon {
+            font-size: 12px !important;
+            opacity: 0.15; 
+            color: #4b5563;
+        }
+
+        .micro-icon-active {
+            opacity: 0.5; 
+            color: #4b5563;
+        }
+
+        .arabic-text { font-family: 'Amiri', serif; direction: rtl; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
+
+        @keyframes mechanical-glow {
+            0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
+            100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+        }
+        .portal-active { animation: mechanical-glow 4s infinite ease-in-out; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "jspdf": "https://esm.sh/jspdf@^3.0.4"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body id="app-body" dir="rtl">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+
+  <!-- QudSystem Centralized Updatable Ad Slot & Footer (Ad-Free in Paid Plans) -->
+  <script src="./qud-ad-slot.js" data-project-name="Adliya — Egyptian AI Legal Assistant" data-project-slug="qud-adliya" data-category="AI Agents & LLM Platforms" defer></script>
+</body>
+</html>

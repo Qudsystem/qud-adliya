@@ -1,0 +1,9 @@
+{
+  "name": "Adliya - Egyptian Legal Assistant",
+  "description": "A professional AI-powered platform for Egyptian legal consultations, document drafting, and lawsuit management with real-time voice interaction.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ],
+  "manifest": "./manifest.json"
+}
